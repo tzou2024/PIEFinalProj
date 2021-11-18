@@ -1,16 +1,14 @@
 # import the required modules
+
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np
 import serial
-arduinoComPort = "COM8"
-baudRate = 9600
-
-serialPort = serial.Serial(arduinoComPort, baudRate, timeout=1)
+import time
   
 # Read the image
 img = cv2.imread(r'C:\Users\tzou\Desktop\Olin 2021\PIE\BigProj\mickey.jpg', 0)
-#plt.imshow(img, interpolation='nearest')
+#plt.imshow(img, interpolation='nearest')p
 
 #plt.show()
 
@@ -52,20 +50,23 @@ image = cv2.resize(image, (new_height, new_width))
   
 # Iterate over the array and print the dark pixels
 # or we can use any other symbol too.
-serialfile = []
+serialfile = ""
 for i in range(len(image)):
     for j in range(len(image[0])):
         print("o" if image[i, j] < 100 else ".", end="")
-        serialfile.append("1" if image[i, j] < 100 else "0")
+        serialfile += str(("1" if image[i, j] < 100 else "0"))
     print()
 
 print(serialfile)
 print(len(serialfile))
-
-def serial_write(x):
+arduino = serial.Serial(port='COM10', baudrate=9600, timeout=.1)
+def write_read(x):
     arduino.write(bytes(x, 'utf-8'))
     time.sleep(0.05)
-
-
+    data = arduino.readline()
+    return data
 while True:
-    serial_write(serialfile)
+    num = input("Send Data") # TakiYng input from user
+    if num:
+        value = write_read(serialfile)
+        print(num)
