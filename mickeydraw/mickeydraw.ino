@@ -105,21 +105,20 @@ void loop() {
     // read the incoming byte:
     String bigstring = Serial.readString();
     int stringlength = bigstring.length();
-    int imgheight = atoi(bigstring[(stringlength)]);
-    for (int i = 1; i < stringlength; i++){
+    int imgheight = atoi(bigstring[0]);
+    for (int i = 2; i < stringlength; i++){
       if (bigstring[(i-1)] == '1'){
         red_dot();
         move_up(1);
-        stepperX.moveRelativeInSteps(-70 * imgheight);
         shift ++;
         }
-      
       else {
         move_up(1);
         shift ++;
       }
       
     }
+    
   }
 
 }

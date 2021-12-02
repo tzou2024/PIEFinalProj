@@ -9,5 +9,5 @@ def write_read(x):
     return data
 while True:
     num = input("Enter: ") # Taking input from user
-    value = write_read(num)
+    value = write_read(num + "\0")
     print(num)
