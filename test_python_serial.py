@@ -8,6 +8,6 @@ def write_read(x):
     data = arduino.readline()
     return data
 while True:
-    num = input("Enter: calibration(L), calibration(R), motorspeed: ") # Taking input from user
+    num = input("Enter: ") # Taking input from user
     value = write_read(num)
     print(num)

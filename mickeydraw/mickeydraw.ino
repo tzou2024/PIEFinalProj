@@ -25,6 +25,7 @@ int red = no_color - red_thresh;
 int pos;
 int servopos = 11;
 int i = 1;
+int shift = 1;
 #include <Servo.h>
 Servo myservo;  // create servo object to control a servo
 
@@ -71,36 +72,6 @@ void setup()
 }
 
 
-
-
-void loop() {
-  // put your main code here, to run repeatedly:
-
-  if (Serial.available() > 0) {
-    // read the incoming byte:
-    String bigstring = Serial.readString();
-    int stringlength = bigstring.length();
-    int imgheight = bigstring[-1];
-    for (int i = 1; i < stringlength-1; i++){
-
-      
-      if (bigstring[(i-1)] == '1'){
-        red_dot();
-        move_up(1);
-      }
-      else {
-        move_up(1);
-      }
-
-      if (i % imgheight = 0){
-        right_shift(imgheight)
-      }
-      
-    }
-  }
-
-}
-
 void red_dot()
 {
   delay(100);
@@ -126,4 +97,29 @@ void right_shift(int y){
   stepperY.moveRelativeInSteps(70 * y);
   stepperX.moveRelativeInSteps(-70);
 }
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  if (Serial.available() > 0) {
+    // read the incoming byte:
+    String bigstring = Serial.readString();
+    int stringlength = bigstring.length();
+    int imgheight = atoi(bigstring[(stringlength)]);
+    for (int i = 1; i < stringlength; i++){
+      if (bigstring[(i-1)] == '1'){
+        red_dot();
+        move_up(1);
+        stepperX.moveRelativeInSteps(-70 * imgheight);
+        shift ++;
+        }
+      
+      else {
+        move_up(1);
+        shift ++;
+      }
+      
+    }
+  }
+
 }
