@@ -1,4 +1,18 @@
 #include <SpeedyStepper.h>
+#include <stdlib.h>     /* atoi */
+
+
+//
+int imgheight = 2;
+int imgwidth = 2;
+String picture = "1100";
+
+
+int xscale = -70;
+int yscale = -70;
+
+
+
 
 
 //
@@ -25,7 +39,8 @@ int red = no_color - red_thresh;
 int pos;
 int servopos = 11;
 int i = 1;
-int shift = 1;
+int shifty = 1;
+int shiftx = 1;
 #include <Servo.h>
 Servo myservo;  // create servo object to control a servo
 
@@ -35,7 +50,6 @@ Servo myservo;  // create servo object to control a servo
 //
 SpeedyStepper stepperX;
 SpeedyStepper stepperY;
-
 
 
 void setup() 
@@ -64,7 +78,7 @@ void setup()
   myservo.write(no_color);
 
   stepperX.setSpeedInStepsPerSecond(600);
-  stepperX.setAccelerationInStepsPerSecondPerSecond(10000);
+  stepperX.setAccelerationInStepsPerSecondPerSecond(3000);
 
   stepperY.setSpeedInStepsPerSecond(600);
   stepperY.setAccelerationInStepsPerSecondPerSecond(10000);
@@ -87,38 +101,57 @@ void red_dot()
   delay(100);
 }
 
-void move_up(int x){
+void move_up(int y){
    delay(100);
-   stepperY.moveRelativeInSteps(-70 * x);
+   stepperY.moveRelativeInSteps(yscale * y);
    delay(100);  
 }
 
-void right_shift(int y){
-  stepperY.moveRelativeInSteps(70 * y);
-  stepperX.moveRelativeInSteps(-70);
+void right_shift(int x){
+  delay(100);
+  stepperX.moveToPositionInSteps(xscale * x);
+  delay(100);
 }
+
 
 void loop() {
   // put your main code here, to run repeatedly:
-
-  if (Serial.available() > 0) {
-    // read the incoming byte:
-    String bigstring = Serial.readString();
-    int stringlength = bigstring.length();
-    int imgheight = atoi(bigstring[0]);
-    for (int i = 2; i < stringlength; i++){
-      if (bigstring[(i-1)] == '1'){
-        red_dot();
-        move_up(1);
-        shift ++;
-        }
-      else {
-        move_up(1);
-        shift ++;
+  int stringlength = picture.length();
+  for (int i = 1; i <= stringlength; i++){
+    
+    if (picture[(i - 1)] == '1'){
+      red_dot();
+      move_up(1);
+      shifty ++;
       }
+
+
       
+    else {
+      move_up(1);
+      shifty ++;
+    }
+
+
+    
+    if (i % imgheight == 0){
+         stepperY.moveToPositionInSteps(0);
+         shifty = 1;
+         shiftx ++;
+         right_shift(shiftx);
+
+         
     }
     
-  }
-
-}
+    
+    }
+    stepperX.moveToPositionInSteps(0);
+    delay(50);
+    stepperY.moveToPositionInSteps(0);   
+    delay(50);
+    stepperY.moveToPositionInSteps(-100y
+    );
+    while(1){}
+    }
+    
+ 
