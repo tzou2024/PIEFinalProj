@@ -7,7 +7,7 @@ import serial
 import time
   
 # Read the image
-img = cv2.imread(r'C:\Users\tzou\Desktop\Olin 2021\PIE\BigProj\mickey.jpg', 0)
+img = cv2.imread(r'C:\Users\tzou\Documents\GitHub\PIEFinalProj\330px-Flag_of_the_United_States.svg.png', 0)
 #plt.imshow(img, interpolation='nearest')p
 
 #plt.show()
@@ -43,7 +43,8 @@ image = cv2.adaptiveThreshold(
 # Preserve the ratio
 ratio = len(image)/len(image[0])
 # Assign new width and calculate new height
-new_width = 60
+new_width = 9
+
 new_height = int(ratio*new_width)
 # Resize the image
 image = cv2.resize(image, (new_height, new_width))
@@ -59,14 +60,39 @@ for i in range(len(image)):
 
 print(serialfile)
 print(len(serialfile))
+from numpy import asarray
+# asarray() class is used to convert
+# PIL images into NumPy arrays
+numpydata = asarray(image)
+  
+# <class 'numpy.ndarray'>
+print(numpydata)
+  
+#  shape
+
+print(new_width)
+
+print(new_height)
+finalstring = ""
+for i in range(new_width):
+    for j in np.flip(numpydata[:,i]):
+        if j > 250:
+            finalstring = finalstring + "0"
+        else:
+            finalstring = finalstring + "1"
+print(finalstring)
+
+'''
 arduino = serial.Serial(port='COM10', baudrate=9600, timeout=.1)
 def write_read(x):
     arduino.write(bytes(x, 'utf-8'))
     time.sleep(0.05)
     data = arduino.readline()
     return data
+
 while True:
     num = input("Send Data") # TakiYng input from user
     if num:
         value = write_read(serialfile)
         print(num)
+        '''
